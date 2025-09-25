@@ -81,6 +81,282 @@ Then execute the command invoking with flask cli with command name and the relev
 $ flask user create bob bobpass
 ```
 
+The following are the commands for Employer:
+
+```python
+#inside wsgi.py
+
+#Creates a new employer with username, password, company name, department and contact info
+@employer_cli.command("create", help="Creates an employer")
+...
+def create_employer_command(username, password, company, department, telephone, email):
+    ...
+    employer = create_employer(username, password, company, department, telephone, email)
+    print (f'Employer {username} created with id {employer.id}')
+
+#Updates an employer's details such as username, company details, and contact info
+#The command first checks that the employer exists and then proceeds to prompt the user for updated data
+#If the employer does not exist then an error message is shown
+@employer_cli.command("update", help="Updates an employer")
+...
+def update_employer_command(employer_id):
+    emp = get_employer(employer_id)
+    if not emp:
+        print(f'Employer not found')
+    else:
+        ...
+        employer = update_employer(employer_id, username, company, department, telephone, email)
+        print (f'Employer {username} updated!')
+        print(employer)
+
+#Displays all the employers in the system or an error message if there is not any employers
+@employer_cli.command("list-all", help="List all employers")
+...
+def get_all_employers_command():
+    ...
+
+#TDisplays all internship positions created by a specified employer
+@employer_cli.command("view-positions", help="Lists internship positions listed by employer")
+...
+def view_positions_command(employer_id):
+    ...
+
+#Displays all student shortlist entries for a specified employer
+@employer_cli.command("view-shortlist", help="Lists employer's student shortlist")
+...
+def view_shortlist_command(employer_id):
+    ...
+
+#Allows an employer to accept or reject a student from their shortlist. It only allows"Accepted" and "Rejected"
+@employer_cli.command("respond", help="Respond to a student listing")
+...
+def respond_command(employer_id, listing_id, response):
+    ...
+```
+
+```bash
+#Example:
+
+$ flask employer create bob bobpass --company="ACE Tech" --department="Computer Science" --telephone="123-4567" --email="bob@acetech.com"
+
+$ flask employer update 2
+#The system then prompts the user for updated data once employer with id 2 exists
+
+$ flask employer list-all
+
+$ flask employer view-positions 2
+
+$ flask employer view-shortlist 2
+
+$ flask employer respond 2 --listing_id=3 --response="Accepted"
+```
+
+The following are the commands for Staff:
+
+```python
+#Creates a new staff member with username, password, university, department, and contact info
+@staff_cli.command("create", help="Create a staff member")
+...
+def create_staff_command(username, password, university, department, telephone, email):
+    ...
+    staff = create_staff(username, password, university, department, telephone, email)
+    print(f'Staff {username} created with id {staff.id}!')
+
+#Updates a staff member's details
+#The command first checks that the staff member exists and then proceeds to prompt the user for updated data
+#If the staff member does not exist then an error message is shown
+@staff_cli.command("update", help="Updates a staff member")
+...
+def update_staff_command(staff_id):
+    staff = get_staff(staff_id)
+    if not staff:
+        print(f'Staff member not found')
+    else:
+    ...
+    staff = update_staff(staff_id, username, university, department, telephone, email)
+        print (f'Staff {username} updated!')
+        print(staff)
+
+#Lists all staff members in the system or error message if no staff found
+@staff_cli.command("list-all", help="List all staff")
+...
+def get_all_staff_command():
+    ...
+
+#Adds a student to a specific internship position shortlist
+@staff_cli.command("add-student", help="Create a student listing")
+...
+def add_student_command(staff_id, student_id, position_id):
+    ...
+
+#Displays all listings associated with a specified staff member
+@staff_cli.command("view-list", help="View listings associated with staff member")
+...
+def view_staff_listing_command(staff_id):
+    ...
+```
+
+```bash
+#Example:
+
+$ flask staff create lisa lisapass --university="UWI" --department="IT" --telephone="555-1234" --email="lisa@uwi.com"
+
+$ flask staff update 3
+#Prompts to update staff data once staff with id 3 exists
+
+$ flask staff list-all
+
+$ flask staff add-student 1 3 2
+
+$ flask staff view-list --staff_id=1
+
+```
+
+
+The following are the commands for Student:
+
+```python
+
+#Creates a new student
+@student_cli.command("create", help="Create a student")
+...
+def create_student_command(username, password, university, major, year, telephone, email):
+    ...
+
+#Updates student data
+#The command first checks that the student exists and then proceeds to prompt the user for updated data
+#If the student does not exist then an error message is shown
+@student_cli.command("update", help="Update student")
+...
+def update_student_command(student_id):
+    student = get_student(student_id)
+    if not student:
+        print(f'Student not found')
+    else:
+        ...
+        student = update_student(student_id, username, university, major, year, telephone, email)
+        print (f'Student {username} updated!')
+        print(student)
+
+#Lists all students
+@student_cli.command("list-all", help="List all students")
+...
+def get_all_students_command():
+    ...
+
+#Displays a student's shortlisted internship positions
+@student_cli.command("view-shortlist", help="View student shortlist")
+...
+def view_student_listing_command(student_id):
+    ...
+
+#Displays employer's responses to student. Internship shortlist status can eithe be "Pending", "Accepted" or "Rejected"
+@student_cli.command("view-responses", help="View employer responses")
+...
+def view_response_command(student_id, status):
+    ...
+
+```
+
+```bash
+#Example:
+
+$ flask student create cait caitpass --university="UWI" --major="Computer Science" --year=3 --telephone="356-7646" --email="cait@uwi.com"
+
+$ flask student update 7
+#Prompts to update student info once the student with id 7 exists
+
+$ flask student list-all
+
+$ flask student view-shortlist 7
+
+$ flask student view-responses 7 --status="Accepted"
+```
+
+The following are the commands for Position (the internship positions created by employers)
+
+```python
+#Creates a new internship position
+@position_cli.command("create", help="Create an internship position")
+...
+def create_position_command(title, description, requirements, location, employer_id):
+    ...
+
+#Update an internship position
+#The command first checks that the position exists and then proceeds to prompt the user for updated data
+#If the position does not exist then an error message is shown
+@position_cli.command("update", help="Update position")
+...
+def update_position_command(position_id):
+    pos = get_position(position_id)
+    if not pos:
+        print(f'Internship position not found')
+    else:
+        ...
+        pos = update_position(position_id, description, requirements, location, emp_id)
+        print (f'Internship position {pos.id} updated!')
+        print(pos)
+
+#Lists all internship positions
+@position_cli.command("view-all", help="List all positions")
+...
+def get_all_positions_command():
+    ...
+```
+
+```bash
+#Example:
+
+$ flask position create --title="Sales Rep" --description="Aid in front desk services" --requirements="Marketing, year1+" --location="POS" --employer_id=5
+
+$ flask position update 2
+#Prompts to update internship details once the internship position with id 2 exists
+
+$ flask position view-all
+```
+
+
+The following commands are for Shortlist:
+
+```python
+#Creates a listing (a shortlist entry) for student a specified internship position, done by a staff member
+@shortlist_cli.command("create", help="Create a listing")
+...
+def create_listing_command(internship_id, student_id, staff_id):
+    ...
+
+#Updates a shortlist record
+#The command first checks that the listing exists and then proceeds to prompt the user for updated data
+#If the listing does not exist then an error message is shown
+@shortlist_cli.command("update", help="Update internship position")
+...
+def update_listing_command(listing_id):
+    listing = get_listing(listing_id)
+    if not listing:
+        print(f'Listing not found')
+    else:
+        ...
+        listing = update_listing(listing_id, internship_id, student_id, staff_id)
+        print(f'Listing {listing.id} updated!')
+        print(listing)
+
+#Displays all shortlists
+@shortlist_cli.command("view-all", help="View all listings")
+...
+def get_all_listings_command():
+    ...
+```
+
+```bash
+#Example:
+
+$ flask shortlist create 1 4 3
+
+$ flask shortlist update 1
+#Prompts to update internship_id, student_id, staff_id once the listing with id 1 exists
+
+$ flask shortlist view-all
+```
 
 # Running the Project
 

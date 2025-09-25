@@ -202,7 +202,7 @@ def view_staff_listing_command(staff_id):
 
 app.cli.add_command(staff_cli)
 
-#Staff commands
+#Student commands
 student_cli = AppGroup('student', help="Student object commands")
 
 @student_cli.command("create", help="Create a student")
