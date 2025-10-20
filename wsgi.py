@@ -12,6 +12,7 @@ from App.controllers.position import *
 from App.controllers.shortlist import *
 
 # This commands file allow you to create convenient CLI commands for testing controllers
+#changes
 
 app = create_app()
 migrate = get_migrate(app)
