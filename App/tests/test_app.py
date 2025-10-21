@@ -10,7 +10,19 @@ from App.controllers import (
     login,
     get_user,
     get_user_by_username,
-    update_user
+    update_user,
+    create_employer,
+    update_employer,
+    create_staff,
+    update_staff,
+    create_student,
+    update_student,
+    create_position,
+    update_position,
+    add_student,
+    respond
+    view_student_listing,
+    view_response
 )
 
 
