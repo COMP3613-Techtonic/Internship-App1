@@ -126,7 +126,7 @@ class UserUnitTests(unittest.TestCase):
         assert isinstance(result, list)
         assert len(results) > 0
 
-    def test_view_accepted
+    def test_view_accepted(self)
         staff = create_staff("jill", "jillpass", "UWI", "DCIT", "3334456", "jill@uwistaff.edu")
         student = create_student("rose", "rosepass", "UWI", "IT", 2, "1234567", "rose@uwi.edu")
         employer = create_employer("john", "johnpass", "ACE Tech", "IT", "2223456", "john@acetech.com")
@@ -137,7 +137,7 @@ class UserUnitTests(unittest.TestCase):
         assert isinstance(accepted, list)
         assert len(accepted) > 0
 
-    def test_view_rejected
+    def test_view_rejected(self)
         staff = create_staff("jill", "jillpass", "UWI", "DCIT", "3334456", "jill@uwistaff.edu")
         student = create_student("rose", "rosepass", "UWI", "IT", 2, "1234567", "rose@uwi.edu")
         employer = create_employer("john", "johnpass", "ACE Tech", "IT", "2223456", "john@acetech.com")
@@ -148,7 +148,7 @@ class UserUnitTests(unittest.TestCase):
         assert isinstance(rejected, list)
         assert len(rejected) > 0
 
-    def test_view_pending
+    def test_view_pending(self)
         staff = create_staff("jill", "jillpass", "UWI", "DCIT", "3334456", "jill@uwistaff.edu")
         student = create_student("rose", "rosepass", "UWI", "IT", 2, "1234567", "rose@uwi.edu")
         employer = create_employer("john", "johnpass", "ACE Tech", "IT", "2223456", "john@acetech.com")
