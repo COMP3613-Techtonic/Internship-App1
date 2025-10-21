@@ -16,11 +16,12 @@ def get_position(position_id):
 def get_all_positions():
     return Position.query.all()
 
-def update_position(position_id, description, requirements, location, employer_id):
+def update_position(position_id,title, description, requirements, location, employer_id):
     position = get_position(position_id)
     '''if not position:
         return "Internship position not found"
     else:'''
+    position.title = title
     position.description = description
     position.requirements = requirements
     position.location = location

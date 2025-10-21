@@ -8,5 +8,11 @@ class Shortlist(db.Model):
     staff_id = db.Column(db.Integer, db.ForeignKey('staff.id'), nullable=False)
     status = db.Column(db.String(20), nullable=False)
 
+    def __init__(self, internship_id, student_id, staff_id, status):
+        self.internship_id = internship_id
+        self.student_id = student_id
+        self.staff_id = staff_id
+        self.status = status
+
     def __repr__(self):
         return f'<Listing ID: {self.id} - Internship ID: {self.internship_id} - Student ID: {self.student_id} - Staff ID: {self.staff_id} - Status: {self.status}>'

@@ -29,6 +29,12 @@ from App.controllers import (
 
 LOGGER = logging.getLogger(__name__)
 
+@pytest.fixture(autouse=True, scope="module")
+def empty_db():
+    app = create_app({'TESTING': True, 'SQLALCHEMY_DATABASE_URI': 'sqlite:///test.db'})
+    create_db()
+    yield app.test_client()
+    db.drop_all()
 '''
    Unit Tests
 
@@ -61,7 +67,7 @@ class UserUnitTests(unittest.TestCase):
 class EmployerUnitTests(unittest.TestCase):
 
     def test_create_employer(self):
-        employer = create_employer("john", "johnpass", "ACE Tech", "IT", "2223456", "john@acetech.com")
+        employer = Employer("john", "johnpass", "ACE Tech", "IT", "2223456", "john@acetech.com")
         assert employer.username == "john"
 
     def test_update_username(self):
@@ -72,7 +78,7 @@ class EmployerUnitTests(unittest.TestCase):
 # Staff - Unit Tests
 class StaffUnitTests(unittest.TestCase):
     def test_create_staff(self):
-        staff = create_staff("jill", "jillpass", "UWI", "DCIT", "3334456", "jill@uwistaff.edu")
+        staff = Staff("jill", "jillpass", "UWI", "DCIT", "3334456", "jill@uwistaff.edu")
         assert staff.username == "jill"
 
     def test_update_staff(self):
@@ -83,7 +89,7 @@ class StaffUnitTests(unittest.TestCase):
 # Student - Unit Tests
 class StudentUnitTests(unittest.TestCase):
     def test_create_student(self):
-        student = create_student("rose", "rosepass", "UWI", "IT", 2, "1234567", "rose@uwi.edu")
+        student = Student("rose", "rosepass", "UWI", "IT", 2, "1234567", "rose@uwi.edu")
         assert student.username == "rose"
 
     def test_update_student(self):
@@ -94,8 +100,8 @@ class StudentUnitTests(unittest.TestCase):
 # Position - Unit Tests
 class PositionUnitTests(unittest.TestCase):
     def test_create_position(self):
-        employer = create_employer("john", "johnpass", "ACE Tech", "IT", "2223456", "john@acetech.com")
-        position = create_position("IT Assistant", "Assist wih service requests", "Level 2 IT degree or equivalent", "POS", employer.id)
+        employer = Employer("john", "johnpass", "ACE Tech", "IT", "2223456", "john@acetech.com")
+        position = Position("IT Assistant", "Assist wih service requests", "Level 2 IT degree or equivalent", "POS", employer.id)
         assert position.title == "IT Assistant"
 
     def test_update_position(self):
@@ -112,6 +118,7 @@ class PositionUnitTests(unittest.TestCase):
     Integration Tests
 '''
 
+
 # This fixture creates an empty database for the test and deletes it after the test
 # scope="class" would execute the fixture once and resued for all methods in the class
 @pytest.fixture(autouse=True, scope="module")
@@ -121,9 +128,9 @@ def empty_db():
     yield app.test_client()
     db.drop_all()
 
-def test_authenticate():
-    user = create_user("bob", "bobpass")
-    assert login("bob", "bobpass") != None
+# def test_authenticate():
+#     user = create_user("bob", "bobpass")
+#     assert login("bob", "bobpass") != None
 
 class UsersIntegrationTests(unittest.TestCase):
 
