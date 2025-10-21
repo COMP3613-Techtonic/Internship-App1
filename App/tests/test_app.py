@@ -3,7 +3,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 from App.main import create_app
 from App.database import db, create_db
-from App.models import User, Employer, Staff, Student, Shotlist, Position
+from App.models import User, Employer, Staff, Student, Shortlist, Position
 from App.controllers import (
     create_user,
     get_all_users_json,
@@ -20,7 +20,7 @@ from App.controllers import (
     create_position,
     update_position,
     add_student,
-    respond
+    respond,
     view_student_listing,
     view_response,
     create_listing
@@ -59,45 +59,48 @@ class UserUnitTests(unittest.TestCase):
 
     def test_create_employer(self):
         employer = create_employer("john", "johnpass", "ACE Tech", "IT", "2223456", "john@acetech.com")
-        assert employer.username = "john"
+        assert employer.username == "john"
 
     def test_update_username(self):
         employer = create_employer("john", "johnpass", "ACE Tech", "IT", "2223456", "john@acetech.com")
         updatedemployer = update_employer(employer.id, "john_updated", "ACE Tech", "IT", "2223456", "john@acetech.com")
-        assert updatedemployer.username = "john_updated"
+        assert updatedemployer.username == "john_updated"
 
 # Staff - Unit Tests
     def create_staff(self):
         staff = create_staff("jill", "jillpass", "UWI", "DCIT", "3334456", "jill@uwistaff.edu")
-        assert staff.username = "jill"
+        assert staff.username == "jill"
 
     def update_staff(self):
         staff = create_staff("jill", "jillpass", "UWI", "DCIT", "3334456", "jill@uwistaff.edu")
         updatedstaff = update_staff(staff.id, "jill_updated", "UWI", "DCIT", "3334456", "jill@uwistaff.edu")
-        assert updatedstaff.username = "jill_updated"
+        assert updatedstaff.username == "jill_updated"
 
 # Student - Unit Tests
     def create_student(self):
         student = create_student("rose", "rosepass", "UWI", "IT", 2, "1234567", "rose@uwi.edu")
-        assert student.username = "rose"
+        assert student.username == "rose"
 
     def update_student(self):
         student = create_student("rose", "rosepass", "UWI", "IT", 2, "1234567", "rose@uwi.edu")
         updatedstudent = update_student(student.id, "rose_updated", "UWI", "IT", 2, "1234567", "rose@uwi.edu")
-        assert student.username = "rose_updated"
+        assert student.username == "rose_updated"
 
 # Position - Unit Tests
     def create_position(self):
         employer = create_employer("john", "johnpass", "ACE Tech", "IT", "2223456", "john@acetech.com")
         position = create_position("IT Assistant", "Assist wih service requests", "Level 2 IT degree or equivalent", "POS", employer.id)
-        assert position.title = "IT Assistant"
+        assert position.title == "IT Assistant"
 
     def update_position(self):
         employer = create_employer("john", "johnpass", "ACE Tech", "IT", "2223456", "john@acetech.com")
         position = create_position("IT Assistant", "Assist wih service requests", "Level 2 IT degree or equivalent", "POS", employer.id)
-        updatedposition = update_position(position.id, "IT Assistant UPDATED", "Assist wih service requests", "Level 2 IT degree or equivalent", "POS", employer.id
-        assert updatedposition.title = "IT Assistant UPDATED"
+        updatedposition = update_position(position.id, "IT Assistant UPDATED", "Assist wih service requests", "Level 2 IT degree or equivalent", "POS", employer.id)
+        assert updatedposition.title == "IT Assistant UPDATED"
     
+
+
+
 
 '''
     Integration Tests
@@ -111,7 +114,6 @@ def empty_db():
     create_db()
     yield app.test_client()
     db.drop_all()
-
 
 def test_authenticate():
     user = create_user("bob", "bobpass")
@@ -151,8 +153,8 @@ class UsersIntegrationTests(unittest.TestCase):
         employer = create_employer("john", "johnpass", "ACE Tech", "IT", "2223456", "john@acetech.com")
         position = create_position("IT Assistant", "Assist wih service requests", "Level 2 IT degree or equivalent", "POS", employer.id)
         listing = add_student(staff.id, student.id, position.id)
-        reponse = respond(employer.id, listing.id, "Accpeted")
-        assert response.status = "Accepted"
+        response = respond(employer.id, listing.id, "Accpeted")
+        assert response.status == "Accepted"
 
     def test_view_student_listing(self):
         staff = create_staff("jill", "jillpass", "UWI", "DCIT", "3334456", "jill@uwistaff.edu")
@@ -162,9 +164,9 @@ class UsersIntegrationTests(unittest.TestCase):
         add_student(staff.id, student.id, position.id)
         result = view_student_listing(student.id)
         assert isinstance(result, list)
-        assert len(results) > 0
+        assert len(result) > 0
 
-    def test_view_accepted(self)
+    def test_view_accepted(self):
         staff = create_staff("jill", "jillpass", "UWI", "DCIT", "3334456", "jill@uwistaff.edu")
         student = create_student("rose", "rosepass", "UWI", "IT", 2, "1234567", "rose@uwi.edu")
         employer = create_employer("john", "johnpass", "ACE Tech", "IT", "2223456", "john@acetech.com")
@@ -175,7 +177,7 @@ class UsersIntegrationTests(unittest.TestCase):
         assert isinstance(accepted, list)
         assert len(accepted) > 0
 
-    def test_view_rejected(self)
+    def test_view_rejected(self):
         staff = create_staff("jill", "jillpass", "UWI", "DCIT", "3334456", "jill@uwistaff.edu")
         student = create_student("rose", "rosepass", "UWI", "IT", 2, "1234567", "rose@uwi.edu")
         employer = create_employer("john", "johnpass", "ACE Tech", "IT", "2223456", "john@acetech.com")
@@ -186,7 +188,7 @@ class UsersIntegrationTests(unittest.TestCase):
         assert isinstance(rejected, list)
         assert len(rejected) > 0
 
-    def test_view_pending(self)
+    def test_view_pending(self):
         staff = create_staff("jill", "jillpass", "UWI", "DCIT", "3334456", "jill@uwistaff.edu")
         student = create_student("rose", "rosepass", "UWI", "IT", 2, "1234567", "rose@uwi.edu")
         employer = create_employer("john", "johnpass", "ACE Tech", "IT", "2223456", "john@acetech.com")
