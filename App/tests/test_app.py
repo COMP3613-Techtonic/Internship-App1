@@ -31,7 +31,11 @@ LOGGER = logging.getLogger(__name__)
 
 '''
    Unit Tests
+
 '''
+
+
+
 class UserUnitTests(unittest.TestCase):
 
     def test_new_user(self):
@@ -45,10 +49,8 @@ class UserUnitTests(unittest.TestCase):
         self.assertDictEqual(user_json, {"id":None, "username":"bob"})
     
     def test_hashed_password(self):
-        password = "mypass"
-        hashed = generate_password_hash(password, method='sha256')
-        user = User("bob", password)
-        assert user.password != password
+        user = User("bob", "bobpass")
+        self.assertNotEqual( user.password,"bobpass")
 
     def test_check_password(self):
         password = "mypass"
@@ -56,6 +58,7 @@ class UserUnitTests(unittest.TestCase):
         assert user.check_password(password)
 
 # Employer - Unit tests
+class EmployerUnitTests(unittest.TestCase):
 
     def test_create_employer(self):
         employer = create_employer("john", "johnpass", "ACE Tech", "IT", "2223456", "john@acetech.com")
@@ -67,32 +70,35 @@ class UserUnitTests(unittest.TestCase):
         assert updatedemployer.username == "john_updated"
 
 # Staff - Unit Tests
-    def create_staff(self):
+class StaffUnitTests(unittest.TestCase):
+    def test_create_staff(self):
         staff = create_staff("jill", "jillpass", "UWI", "DCIT", "3334456", "jill@uwistaff.edu")
         assert staff.username == "jill"
 
-    def update_staff(self):
+    def test_update_staff(self):
         staff = create_staff("jill", "jillpass", "UWI", "DCIT", "3334456", "jill@uwistaff.edu")
         updatedstaff = update_staff(staff.id, "jill_updated", "UWI", "DCIT", "3334456", "jill@uwistaff.edu")
         assert updatedstaff.username == "jill_updated"
 
 # Student - Unit Tests
-    def create_student(self):
+class StudentUnitTests(unittest.TestCase):
+    def test_create_student(self):
         student = create_student("rose", "rosepass", "UWI", "IT", 2, "1234567", "rose@uwi.edu")
         assert student.username == "rose"
 
-    def update_student(self):
+    def test_update_student(self):
         student = create_student("rose", "rosepass", "UWI", "IT", 2, "1234567", "rose@uwi.edu")
         updatedstudent = update_student(student.id, "rose_updated", "UWI", "IT", 2, "1234567", "rose@uwi.edu")
-        assert student.username == "rose_updated"
+        assert updatedstudent.username == "rose_updated"
 
 # Position - Unit Tests
-    def create_position(self):
+class PositionUnitTests(unittest.TestCase):
+    def test_create_position(self):
         employer = create_employer("john", "johnpass", "ACE Tech", "IT", "2223456", "john@acetech.com")
         position = create_position("IT Assistant", "Assist wih service requests", "Level 2 IT degree or equivalent", "POS", employer.id)
         assert position.title == "IT Assistant"
 
-    def update_position(self):
+    def test_update_position(self):
         employer = create_employer("john", "johnpass", "ACE Tech", "IT", "2223456", "john@acetech.com")
         position = create_position("IT Assistant", "Assist wih service requests", "Level 2 IT degree or equivalent", "POS", employer.id)
         updatedposition = update_position(position.id, "IT Assistant UPDATED", "Assist wih service requests", "Level 2 IT degree or equivalent", "POS", employer.id)
