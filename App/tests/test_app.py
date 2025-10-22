@@ -66,50 +66,29 @@ class UserUnitTests(unittest.TestCase):
 # Employer - Unit tests
 class EmployerUnitTests(unittest.TestCase):
 
-    def test_create_employer(self):
+    def test_new_employer(self):
         employer = Employer("john", "johnpass", "ACE Tech", "IT", "2223456", "john@acetech.com")
         assert employer.username == "john"
 
-    def test_update_username(self):
-        employer = create_employer("john", "johnpass", "ACE Tech", "IT", "2223456", "john@acetech.com")
-        updatedemployer = update_employer(employer.id, "john_updated", "ACE Tech", "IT", "2223456", "john@acetech.com")
-        assert updatedemployer.username == "john_updated"
-
 # Staff - Unit Tests
 class StaffUnitTests(unittest.TestCase):
-    def test_create_staff(self):
+    def test_new_staff(self):
         staff = Staff("jill", "jillpass", "UWI", "DCIT", "3334456", "jill@uwistaff.edu")
         assert staff.username == "jill"
 
-    def test_update_staff(self):
-        staff = create_staff("jill", "jillpass", "UWI", "DCIT", "3334456", "jill@uwistaff.edu")
-        updatedstaff = update_staff(staff.id, "jill_updated", "UWI", "DCIT", "3334456", "jill@uwistaff.edu")
-        assert updatedstaff.username == "jill_updated"
-
 # Student - Unit Tests
 class StudentUnitTests(unittest.TestCase):
-    def test_create_student(self):
+    def test_new_student(self):
         student = Student("rose", "rosepass", "UWI", "IT", 2, "1234567", "rose@uwi.edu")
         assert student.username == "rose"
 
-    def test_update_student(self):
-        student = create_student("rose", "rosepass", "UWI", "IT", 2, "1234567", "rose@uwi.edu")
-        updatedstudent = update_student(student.id, "rose_updated", "UWI", "IT", 2, "1234567", "rose@uwi.edu")
-        assert updatedstudent.username == "rose_updated"
 
 # Position - Unit Tests
 class PositionUnitTests(unittest.TestCase):
-    def test_create_position(self):
+    def test_new_position(self):
         employer = Employer("john", "johnpass", "ACE Tech", "IT", "2223456", "john@acetech.com")
         position = Position("IT Assistant", "Assist wih service requests", "Level 2 IT degree or equivalent", "POS", employer.id)
         assert position.title == "IT Assistant"
-
-    def test_update_position(self):
-        employer = create_employer("john", "johnpass", "ACE Tech", "IT", "2223456", "john@acetech.com")
-        position = create_position("IT Assistant", "Assist wih service requests", "Level 2 IT degree or equivalent", "POS", employer.id)
-        updatedposition = update_position(position.id, "IT Assistant UPDATED", "Assist wih service requests", "Level 2 IT degree or equivalent", "POS", employer.id)
-        assert updatedposition.title == "IT Assistant UPDATED"
-    
 
 
 
@@ -150,7 +129,30 @@ class UsersIntegrationTests(unittest.TestCase):
 
 
 
-        
+    def test_update_username(self):
+        employer = create_employer("john", "johnpass", "ACE Tech", "IT", "2223456", "john@acetech.com")
+        updatedemployer = update_employer(employer.id, "john_updated", "ACE Tech", "IT", "2223456", "john@acetech.com")
+        assert updatedemployer.username == "john_updated"
+
+    def test_update_staff(self):
+        staff = create_staff("jill", "jillpass", "UWI", "DCIT", "3334456", "jill@uwistaff.edu")
+        updatedstaff = update_staff(staff.id, "jill_updated", "UWI", "DCIT", "3334456", "jill@uwistaff.edu")
+        assert updatedstaff.username == "jill_updated" 
+
+
+    def test_update_student(self):
+        student = create_student("rose", "rosepass", "UWI", "IT", 2, "1234567", "rose@uwi.edu")
+        updatedstudent = update_student(student.id, "rose_updated", "UWI", "IT", 2, "1234567", "rose@uwi.edu")
+        assert updatedstudent.username == "rose_updated"
+
+    def test_update_position(self):
+        employer = create_employer("john", "johnpass", "ACE Tech", "IT", "2223456", "john@acetech.com")
+        position = create_position("IT Assistant", "Assist wih service requests", "Level 2 IT degree or equivalent", "POS", employer.id)
+        updatedposition = update_position(position.id, "IT Assistant UPDATED", "Assist wih service requests", "Level 2 IT degree or equivalent", "POS", employer.id)
+        assert updatedposition.title == "IT Assistant UPDATED"
+
+    
+    
 
     def test_add_student_listing(self):
         staff = create_staff("jill", "jillpass", "UWI", "DCIT", "3334456", "jill@uwistaff.edu")
