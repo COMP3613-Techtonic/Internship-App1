@@ -275,7 +275,7 @@ position_cli = AppGroup('position', help="Internship position object commands")
 @click.option("--requirements", prompt="Enter requirements", default="")
 @click.option("--location", prompt="Enter location", default="")
 @click.option("--employer_id", prompt="Enter employer id:", default="1")
-def create_position_command(title, description, requirements, location, employer_id):
+def create_position_command(title, description, requirements, location, employer_id): # make sure to verify id belongs to an employer
     pos = create_position(title, description, requirements, location, employer_id)
     print (f'Internship position {pos.id} created!')
 

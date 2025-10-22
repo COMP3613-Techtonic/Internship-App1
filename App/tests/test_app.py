@@ -14,7 +14,7 @@ from App.controllers import (
     create_employer, update_employer, get_employer,
     create_staff, update_staff, get_staff,
     create_student, update_student, get_student,
-    create_position, update_position, get_position
+    create_position, update_position, get_position,
     add_student, get_listing,
     respond,
     view_student_listing,
@@ -103,19 +103,24 @@ def empty_db():
     yield app.test_client()
     db.drop_all()
 
+   
+
+
+
 # def test_authenticate():
 #     user = create_user("bob", "bobpass")
 #     assert login("bob", "bobpass") != None
 
 class UsersIntegrationTests(unittest.TestCase):
 
-    def test_create_user(self):
-        user = create_user("rick", "bobpass")
+    def test_create_user(self):  
+        user = create_user("rick", "bobpass")    
         assert user.username == "rick"
 
     def test_get_all_users_json(self):
+        user2=create_user("morty", "mortypass")
         users_json = get_all_users_json()
-        self.assertListEqual([{"id":1, "username":"bob"}, {"id":2, "username":"rick"}], users_json)
+        self.assertListEqual([{"id":1, "username":"rick"}, {"id":2, "username":"morty"}], users_json)
 
     # Tests data changes in the database
     def test_update_user(self):
@@ -123,135 +128,135 @@ class UsersIntegrationTests(unittest.TestCase):
         user = get_user(1)
         assert user.username == "ronnie"
 
-'''
-    def test_create_staff():
-        ron = create_staff("ron", "bobpass")
-        user = get_staff(ron.id)
-        assert user.username == ron.username
-'''
+    # '''
+    # def test_create_staff():
+    #     ron = create_staff("ron", "bobpass")
+    #     user = get_staff(ron.id)
+    #     assert user.username == ron.username
+    # '''
 
-    def test_create_employer():
+    def test_create_employer(self):
         john = create_employer("john", "johnpass", "ACE Tech", "IT", "2223456", "john@acetech.com")
         user = get_employer(john.id)
         assert user.username == john.username
 
-    def test_update_employer():
+    def test_update_employer(self):
         employer = get_employer(1)
         updatedemployer = update_employer(employer.id, "john_updated", "ACE Tech", "IT", "2223456", "john@acetech.com")
         assert updatedemployer.username == "john_updated"
 
 
-    def test_create_staff():
+    def test_create_staff(self):
         jill = create_staff("jill", "jillpass", "UWI", "DCIT", "3334456", "jill@uwistaff.edu")
         user = get_staff(jill.id)
         assert user.username == jill.username
 
-    def test_update_staff():
+    def test_update_staff(self):
         staff = get_staff(1)
         updatedstaff = update_staff(staff.id, "jill_updated", "UWI", "DCIT", "3334456", "jill@uwistaff.edu")
         assert updatedstaff.username == "jill_updated"
 
-    def test_create_student():
+    def test_create_student(self):
         rose = create_student("rose", "rosepass", "UWI", "IT", 2, "1234567", "rose@uwi.edu")
         user = get_student(rose.id)
         assert user.username == rose.username
 
-    def test_update_student():
+    def test_update_student(self):
         rose = get_student(1)
         updatedstudent = update_student(rose.id, "rose_updated", "UWI", "IT", 2, "1234567", "rose@uwi.edu")
         assert updatedstudent.username == "rose_updated"
 
-    def test_create_position():
+    def test_create_position(self):
         employer = get_employer(1)
         internship = create_position("IT Assistant", "Assist wih service requests", "Level 2 IT degree or equivalent", "POS", employer.id)
         position = get_position(internship.id)
         assert position.title == "IT Assistant"
 
-    def test_update_position():
+    def test_update_position(self):
         internship = get_position(1)
-        updatedposition = update_position(internship.id, "IT Assistant UPDATED", "Assist wih service requests", "Level 2 IT degree or equivalent", "POS", position.employer_id) 
+        updatedposition = update_position(internship.id, "IT Assistant UPDATED", "Assist wih service requests", "Level 2 IT degree or equivalent", "POS", internship.employer_id)
         assert updatedposition.title == "IT Assistant UPDATED"
         
-'''
-    def test_update_employer(self):
-        employer = create_employer("john", "johnpass", "ACE Tech", "IT", "2223456", "john@acetech.com")
-        updatedemployer = update_employer(employer.id, "john_updated", "ACE Tech", "IT", "2223456", "john@acetech.com")
-        assert updatedemployer.username == "john_updated"
+    # '''
+    # def test_update_employer(self):
+    #     employer = create_employer("john", "johnpass", "ACE Tech", "IT", "2223456", "john@acetech.com")
+    #     updatedemployer = update_employer(employer.id, "john_updated", "ACE Tech", "IT", "2223456", "john@acetech.com")
+    #     assert updatedemployer.username == "john_updated"
 
-    def test_update_staff(self):
-        staff = create_staff("jill", "jillpass", "UWI", "DCIT", "3334456", "jill@uwistaff.edu")
-        updatedstaff = update_staff(staff.id, "jill_updated", "UWI", "DCIT", "3334456", "jill@uwistaff.edu")
-        assert updatedstaff.username == "jill_updated" 
-
-
-    def test_update_student(self):
-        student = create_student("rose", "rosepass", "UWI", "IT", 2, "1234567", "rose@uwi.edu")
-        updatedstudent = update_student(student.id, "rose_updated", "UWI", "IT", 2, "1234567", "rose@uwi.edu")
-        assert updatedstudent.username == "rose_updated"
+    # def test_update_staff(self):
+    #     staff = create_staff("jill", "jillpass", "UWI", "DCIT", "3334456", "jill@uwistaff.edu")
+    #     updatedstaff = update_staff(staff.id, "jill_updated", "UWI", "DCIT", "3334456", "jill@uwistaff.edu")
+    #     assert updatedstaff.username == "jill_updated" 
 
 
-    def test_update_position(self):
-        employer = create_employer("john", "johnpass", "ACE Tech", "IT", "2223456", "john@acetech.com")
-        position = create_position("IT Assistant", "Assist wih service requests", "Level 2 IT degree or equivalent", "POS", employer.id)
-        updatedposition = update_position(position.id, "IT Assistant UPDATED", "Assist wih service requests", "Level 2 IT degree or equivalent", "POS", employer.id)
-        assert updatedposition.title == "IT Assistant UPDATED"
-'''
+    # def test_update_student(self):
+    #     student = create_student("rose", "rosepass", "UWI", "IT", 2, "1234567", "rose@uwi.edu")
+    #     updatedstudent = update_student(student.id, "rose_updated", "UWI", "IT", 2, "1234567", "rose@uwi.edu")
+    #     assert updatedstudent.username == "rose_updated"
+
+
+    # def test_update_position(self):
+    #     employer = create_employer("john", "johnpass", "ACE Tech", "IT", "2223456", "john@acetech.com")
+    #     position = create_position("IT Assistant", "Assist wih service requests", "Level 2 IT degree or equivalent", "POS", employer.id)
+    #     updatedposition = update_position(position.id, "IT Assistant UPDATED", "Assist wih service requests", "Level 2 IT degree or equivalent", "POS", employer.id)
+    #     assert updatedposition.title == "IT Assistant UPDATED"
+    # '''
     
 
-    def test_add_student_listing():
+    def test_add_student_listing(self):
         staff = get_staff(1)
         student = get_student(1)
         position = get_position(1)
         listing = add_student(staff.id, student.id, position.id)
         assert listing.status == "Pending"
 
-'''
-    def test_add_student_listing(self):
-        staff = create_staff("jill", "jillpass", "UWI", "DCIT", "3334456", "jill@uwistaff.edu")
-        student = create_student("rose", "rosepass", "UWI", "IT", 2, "1234567", "rose@uwi.edu")
-        employer = create_employer("john", "johnpass", "ACE Tech", "IT", "2223456", "john@acetech.com")
-        position = create_position("IT Assistant", "Assist wih service requests", "Level 2 IT degree or equivalent", "POS", employer.id)
-        listing = add_student(staff.id, student.id, position.id)
-        assert listing.status == "Pending"
-    '''
+    # '''
+    # def test_add_student_listing(self):
+    #     staff = create_staff("jill", "jillpass", "UWI", "DCIT", "3334456", "jill@uwistaff.edu")
+    #     student = create_student("rose", "rosepass", "UWI", "IT", 2, "1234567", "rose@uwi.edu")
+    #     employer = create_employer("john", "johnpass", "ACE Tech", "IT", "2223456", "john@acetech.com")
+    #     position = create_position("IT Assistant", "Assist wih service requests", "Level 2 IT degree or equivalent", "POS", employer.id)
+    #     listing = add_student(staff.id, student.id, position.id)
+    #     assert listing.status == "Pending"
+    # '''
 
-    def test_employer_response():
+    def test_employer_response(self):
         employer = get_employer(1)
         listing = get_listing(1)
-        response = respond(employer.id, listing.id, "Accpeted")
+        response = respond(employer.id, listing.id, "Accepted")
         assert response.status == "Accepted"
 
 
-'''
-    def test_employer_response(self):
-        staff = create_staff("jill", "jillpass", "UWI", "DCIT", "3334456", "jill@uwistaff.edu")
-        student = create_student("rose", "rosepass", "UWI", "IT", 2, "1234567", "rose@uwi.edu")
-        employer = create_employer("john", "johnpass", "ACE Tech", "IT", "2223456", "john@acetech.com")
-        position = create_position("IT Assistant", "Assist wih service requests", "Level 2 IT degree or equivalent", "POS", employer.id)
-        listing = add_student(staff.id, student.id, position.id)
-        response = respond(employer.id, listing.id, "Accpeted")
-        assert response.status == "Accepted"
-    '''
+    # '''
+    # def test_employer_response(self):
+    #     staff = create_staff("jill", "jillpass", "UWI", "DCIT", "3334456", "jill@uwistaff.edu")
+    #     student = create_student("rose", "rosepass", "UWI", "IT", 2, "1234567", "rose@uwi.edu")
+    #     employer = create_employer("john", "johnpass", "ACE Tech", "IT", "2223456", "john@acetech.com")
+    #     position = create_position("IT Assistant", "Assist wih service requests", "Level 2 IT degree or equivalent", "POS", employer.id)
+    #     listing = add_student(staff.id, student.id, position.id)
+    #     response = respond(employer.id, listing.id, "Accpeted")
+    #     assert response.status == "Accepted"
+    # '''
 
-    def test_view_student_listing():
+    def test_view_student_listing(self):
         student = get_student(1)
         result = view_student_listing(student.id)
         assert isinstance(result, list)
         assert len(result) > 0
 
-'''
-    def test_view_student_listing(self):
-        staff = create_staff("jill", "jillpass", "UWI", "DCIT", "3334456", "jill@uwistaff.edu")
-        student = create_student("rose", "rosepass", "UWI", "IT", 2, "1234567", "rose@uwi.edu")
-        employer = create_employer("john", "johnpass", "ACE Tech", "IT", "2223456", "john@acetech.com")
-        position = create_position("IT Assistant", "Assist wih service requests", "Level 2 IT degree or equivalent", "POS", employer.id)
-        add_student(staff.id, student.id, position.id)
-        result = view_student_listing(student.id)
-        assert isinstance(result, list)
-        assert len(result) > 0
-    '''
+    # '''
+    # def test_view_student_listing(self):
+    #     staff = create_staff("jill", "jillpass", "UWI", "DCIT", "3334456", "jill@uwistaff.edu")
+    #     student = create_student("rose", "rosepass", "UWI", "IT", 2, "1234567", "rose@uwi.edu")
+    #     employer = create_employer("john", "johnpass", "ACE Tech", "IT", "2223456", "john@acetech.com")
+    #     position = create_position("IT Assistant", "Assist wih service requests", "Level 2 IT degree or equivalent", "POS", employer.id)
+    #     add_student(staff.id, student.id, position.id)
+    #     result = view_student_listing(student.id)
+    #     assert isinstance(result, list)
+    #     assert len(result) > 0
+    # '''
 
-    def test_view_response():
+    def test_view_response(self):
         student = get_student(1)
         employer = get_employer(1)
         listing = get_listing(1)
@@ -269,37 +274,37 @@ class UsersIntegrationTests(unittest.TestCase):
         assert isinstance(rejected, list)
         assert len(rejected) > 0
 
-'''
-    def test_view_accepted(self):
-        staff = create_staff("jill", "jillpass", "UWI", "DCIT", "3334456", "jill@uwistaff.edu")
-        student = create_student("rose", "rosepass", "UWI", "IT", 2, "1234567", "rose@uwi.edu")
-        employer = create_employer("john", "johnpass", "ACE Tech", "IT", "2223456", "john@acetech.com")
-        position = create_position("IT Assistant", "Assist wih service requests", "Level 2 IT degree or equivalent", "POS", employer.id)
-        listing = create_listing(position.id, student.id, staff.id)
-        respond(employer.id, listing.id, "Accepted")
-        accepted = view_response(student.id, "Accepted")
-        assert isinstance(accepted, list)
-        assert len(accepted) > 0
+# '''
+#     def test_view_accepted(self):
+#         staff = create_staff("jill", "jillpass", "UWI", "DCIT", "3334456", "jill@uwistaff.edu")
+#         student = create_student("rose", "rosepass", "UWI", "IT", 2, "1234567", "rose@uwi.edu")
+#         employer = create_employer("john", "johnpass", "ACE Tech", "IT", "2223456", "john@acetech.com")
+#         position = create_position("IT Assistant", "Assist wih service requests", "Level 2 IT degree or equivalent", "POS", employer.id)
+#         listing = create_listing(position.id, student.id, staff.id)
+#         respond(employer.id, listing.id, "Accepted")
+#         accepted = view_response(student.id, "Accepted")
+#         assert isinstance(accepted, list)
+#         assert len(accepted) > 0
 
-    def test_view_rejected(self):
-        staff = create_staff("jill", "jillpass", "UWI", "DCIT", "3334456", "jill@uwistaff.edu")
-        student = create_student("rose", "rosepass", "UWI", "IT", 2, "1234567", "rose@uwi.edu")
-        employer = create_employer("john", "johnpass", "ACE Tech", "IT", "2223456", "john@acetech.com")
-        position = create_position("IT Assistant", "Assist wih service requests", "Level 2 IT degree or equivalent", "POS", employer.id)
-        listing = create_listing(position.id, student.id, staff.id)
-        respond(employer.id, listing.id, "Accepted")
-        rejected = view_response(student.id, "Rejected")
-        assert isinstance(rejected, list)
-        assert len(rejected) > 0
+#     def test_view_rejected(self):
+#         staff = create_staff("jill", "jillpass", "UWI", "DCIT", "3334456", "jill@uwistaff.edu")
+#         student = create_student("rose", "rosepass", "UWI", "IT", 2, "1234567", "rose@uwi.edu")
+#         employer = create_employer("john", "johnpass", "ACE Tech", "IT", "2223456", "john@acetech.com")
+#         position = create_position("IT Assistant", "Assist wih service requests", "Level 2 IT degree or equivalent", "POS", employer.id)
+#         listing = create_listing(position.id, student.id, staff.id)
+#         respond(employer.id, listing.id, "Accepted")
+#         rejected = view_response(student.id, "Rejected")
+#         assert isinstance(rejected, list)
+#         assert len(rejected) > 0
 
-    def test_view_pending(self):
-        staff = create_staff("jill", "jillpass", "UWI", "DCIT", "3334456", "jill@uwistaff.edu")
-        student = create_student("rose", "rosepass", "UWI", "IT", 2, "1234567", "rose@uwi.edu")
-        employer = create_employer("john", "johnpass", "ACE Tech", "IT", "2223456", "john@acetech.com")
-        position = create_position("IT Assistant", "Assist wih service requests", "Level 2 IT degree or equivalent", "POS", employer.id)
-        listing = create_listing(position.id, student.id, staff.id)
-        respond(employer.id, listing.id, "Pending")
-        pending = view_response(student.id, "Pending")
-        assert isinstance(pending, list)
-        assert len(pending) > 0
-'''
+#     def test_view_pending(self):
+#         staff = create_staff("jill", "jillpass", "UWI", "DCIT", "3334456", "jill@uwistaff.edu")
+#         student = create_student("rose", "rosepass", "UWI", "IT", 2, "1234567", "rose@uwi.edu")
+#         employer = create_employer("john", "johnpass", "ACE Tech", "IT", "2223456", "john@acetech.com")
+#         position = create_position("IT Assistant", "Assist wih service requests", "Level 2 IT degree or equivalent", "POS", employer.id)
+#         listing = create_listing(position.id, student.id, staff.id)
+#         respond(employer.id, listing.id, "Pending")
+#         pending = view_response(student.id, "Pending")
+#         assert isinstance(pending, list)
+#         assert len(pending) > 0
+# '''

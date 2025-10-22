@@ -12,10 +12,10 @@ def get_user_by_username(username):
     return result.scalar_one_or_none()
 
 def get_user(id):
-    return db.session.get(User, id)
+    return User.query.get(id)
 
 def get_all_users():
-    return db.session.scalars(db.select(User)).all()
+    return User.query.all()
 
 def get_all_users_json():
     users = get_all_users()
