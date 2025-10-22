@@ -255,6 +255,7 @@ class UsersIntegrationTests(unittest.TestCase):
         student = get_student(1)
         employer = get_employer(1)
         listing = get_listing(1)
+        respond(employer.id, listing.id, "Pending")
         pending = view_response(student.id, "Pending")
         assert isinstance(pending, list)
         assert len(pending) > 0
