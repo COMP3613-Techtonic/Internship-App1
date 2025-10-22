@@ -135,7 +135,7 @@ def view_shortlist_command(employer_id):
 @click.option("--listing_id", prompt="Enter intership ID:", default="1")
 @click.option("--response", prompt="Enter response:", default="Accepted/Rejected")
 def respond_command(employer_id, listing_id, response):
-    if response not in ["Accepted", "Rejected"]:
+    if response not in ["Accepted", "Rejected", "Pending"]:
         print(f'Invalid response: Student can either be Accepted OR Rejected')
     else:
         print(respond(employer_id, listing_id, response))
