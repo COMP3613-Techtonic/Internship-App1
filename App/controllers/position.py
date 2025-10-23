@@ -1,7 +1,13 @@
 from App.models.position import Position
 from App.database import db
+from App.models.employer import Employer
+
 
 def create_position(title, description, requirements, location, employer_id):
+    validID=Employer.query.get(employer_id)
+    if not validID: # make sure employer ID exists
+        return "Employer ID not found"
+    
     newPosition = Position(title=title, description=description, requirements=requirements, location=location, employer_id=employer_id)
     db.session.add(newPosition)
     db.session.commit()

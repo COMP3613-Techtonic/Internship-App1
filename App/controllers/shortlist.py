@@ -1,9 +1,22 @@
 from App.models.shortlist import Shortlist
 from App.models.position import Position
+from App.models.student import Student
+from App.models.staff import Staff
 from App.database import db
 
-def create_listing(internship_id, student_id, staff_id):
-    newListing = Shortlist(internship_id=internship_id, student_id=student_id, staff_id=staff_id, status="Pending")
+def create_listing(internship_id, student_id, staff_id):  
+    validInternship=Position.query.get(internship_id)
+    validStudent=Student.query.get(student_id)
+    validStaff=Staff.query.get(staff_id)
+
+    if not validInternship:
+        return "Internship ID not found"
+    if not validStudent:
+        return "Student ID not found"
+    if not validStaff:
+        return "Staff ID not found"
+
+    newListing = Shortlist(internship_id=internship_id, student_id=student_id, staff_id=staff_id, status="Pending") # makes sure the ID's arent random numbers
     db.session.add(newListing)
     db.session.commit()
     return newListing
