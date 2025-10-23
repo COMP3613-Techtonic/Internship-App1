@@ -19,7 +19,11 @@ from App.controllers import (
     respond,
     view_student_listing,
     view_response,
-    create_listing
+    create_listing,
+    get_employer_by_username,
+    get_staff_by_username,
+    get_student_by_username,
+    
 )
 
 
@@ -113,17 +117,17 @@ def empty_db():
 
 class UsersIntegrationTests(unittest.TestCase):
 
-    def test_create_user(self):  
+    def test_01_create_user(self):  
         user = create_user("rick", "bobpass")    
         assert user.username == "rick"
 
-    def test_get_all_users_json(self):
+    def test_02_get_all_users_json(self):
         user2=create_user("morty", "mortypass")
         users_json = get_all_users_json()
         self.assertListEqual([{"id":1, "username":"rick"}, {"id":2, "username":"morty"}], users_json)
 
     # Tests data changes in the database
-    def test_update_user(self):
+    def test_03_update_user(self):
         update_user(1, "ronnie")
         user = get_user(1)
         assert user.username == "ronnie"
@@ -135,44 +139,44 @@ class UsersIntegrationTests(unittest.TestCase):
     #     assert user.username == ron.username
     # '''
 
-    def test_create_employer(self):
+    def test_04_create_employer(self):
         john = create_employer("john", "johnpass", "ACE Tech", "IT", "2223456", "john@acetech.com")
         user = get_employer_by_username("john")
         assert user.username == john.username
 
-    def test_update_employer(self):
+    def test_05_update_employer(self):
         employer = get_employer_by_username("john")
         updatedemployer = update_employer(employer.id, "john_updated", "ACE Tech", "IT", "2223456", "john@acetech.com")
         assert updatedemployer.username == "john_updated"
 
 
-    def test_create_staff(self):
+    def test_06_create_staff(self):
         jill = create_staff("jill", "jillpass", "UWI", "DCIT", "3334456", "jill@uwistaff.edu")
         user = get_staff_by_username("jill")
         assert user.username == jill.username
 
-    def test_update_staff(self):
+    def test_07_update_staff(self):
         staff = get_staff_by_username("jill")
         updatedstaff = update_staff(staff.id, "jill_updated", "UWI", "DCIT", "3334456", "jill@uwistaff.edu")
         assert updatedstaff.username == "jill_updated"
 
-    def test_create_student(self):
+    def test_08_create_student(self):
         rose = create_student("rose", "rosepass", "UWI", "IT", 2, "1234567", "rose@uwi.edu")
         user = get_student_by_username("rose")
         assert user.username == rose.username
 
-    def test_update_student(self):
+    def test_09_update_student(self):
         rose = get_student_by_username("rose")
         updatedstudent = update_student(rose.id, "rose_updated", "UWI", "IT", 2, "1234567", "rose@uwi.edu")
         assert updatedstudent.username == "rose_updated"
 
-    def test_create_position(self):
-        employer = get_employer_by_username("john")
+    def test_10_create_position(self):
+        employer = get_employer_by_username("john_updated")
         internship = create_position("IT Assistant", "Assist wih service requests", "Level 2 IT degree or equivalent", "POS", employer.id)
         position = get_position(internship.id)
         assert position.title == "IT Assistant"
 
-    def test_update_position(self):
+    def test_11_update_position(self):
         internship = get_position(1)
         updatedposition = update_position(internship.id, "IT Assistant UPDATED", "Assist wih service requests", "Level 2 IT degree or equivalent", "POS", internship.employer_id)
         assert updatedposition.title == "IT Assistant UPDATED"
@@ -203,9 +207,9 @@ class UsersIntegrationTests(unittest.TestCase):
     # '''
     
 
-    def test_add_student_listing(self):
-        staff = get_staff_by_username("jill")
-        student = get_student_by_username("rose")
+    def test_12_add_student_listing(self):
+        staff = get_staff_by_username("jill_updated")
+        student = get_student_by_username("rose_updated")
         position = get_position(1)
         listing = add_student(staff.id, student.id, position.id)
         assert listing.status == "Pending"
@@ -220,8 +224,8 @@ class UsersIntegrationTests(unittest.TestCase):
     #     assert listing.status == "Pending"
     # '''
 
-    def test_employer_response(self):
-        employer = get_employer_by_username("john")
+    def test_13_employer_response(self):
+        employer = get_employer_by_username("john_updated")
         listing = get_listing(1)
         response = respond(employer.id, listing.id, "Accepted")
         assert response.status == "Accepted"
@@ -238,8 +242,8 @@ class UsersIntegrationTests(unittest.TestCase):
     #     assert response.status == "Accepted"
     # '''
 
-    def test_view_student_listing(self):
-        student = get_student_by_username("rose")
+    def test_14_view_student_listing(self):
+        student = get_student_by_username("rose_updated")
         result = view_student_listing(student.id)
         assert isinstance(result, list)
         assert len(result) > 0
@@ -256,9 +260,9 @@ class UsersIntegrationTests(unittest.TestCase):
     #     assert len(result) > 0
     # '''
 
-    def test_view_response(self):
-        student = get_student_by_username("rose")
-        employer = get_employer_by_username("john")
+    def test_15_view_response(self):
+        student = get_student_by_username("rose_updated")
+        employer = get_employer_by_username("john_updated")
         listing = get_listing(1)
         respond(employer.id, listing.id, "Pending")
         pending = view_response(student.id, "Pending")
