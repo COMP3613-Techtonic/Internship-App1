@@ -125,13 +125,6 @@ class UsersIntegrationTests(unittest.TestCase):
         user = get_user(1)
         assert user.username == "ronnie"
 
-    # '''
-    # def test_create_staff():
-    #     ron = create_staff("ron", "bobpass")
-    #     user = get_staff(ron.id)
-    #     assert user.username == ron.username
-    # '''
-
     # Ensures employer record in the database has the correct values
     def test_04_create_employer(self):
         john = create_employer("john", "johnpass", "ACE Tech", "IT", "2223456", "john@acetech.com")
@@ -180,31 +173,6 @@ class UsersIntegrationTests(unittest.TestCase):
         internship = get_position(1)
         updatedposition = update_position(internship.id, "IT Assistant UPDATED", "Assist wih service requests", "Level 2 IT degree or equivalent", "POS", internship.employer_id)
         assert updatedposition.title == "IT Assistant UPDATED"
-        
-    # '''
-    # def test_update_employer(self):
-    #     employer = create_employer("john", "johnpass", "ACE Tech", "IT", "2223456", "john@acetech.com")
-    #     updatedemployer = update_employer(employer.id, "john_updated", "ACE Tech", "IT", "2223456", "john@acetech.com")
-    #     assert updatedemployer.username == "john_updated"
-
-    # def test_update_staff(self):
-    #     staff = create_staff("jill", "jillpass", "UWI", "DCIT", "3334456", "jill@uwistaff.edu")
-    #     updatedstaff = update_staff(staff.id, "jill_updated", "UWI", "DCIT", "3334456", "jill@uwistaff.edu")
-    #     assert updatedstaff.username == "jill_updated" 
-
-
-    # def test_update_student(self):
-    #     student = create_student("rose", "rosepass", "UWI", "IT", 2, "1234567", "rose@uwi.edu")
-    #     updatedstudent = update_student(student.id, "rose_updated", "UWI", "IT", 2, "1234567", "rose@uwi.edu")
-    #     assert updatedstudent.username == "rose_updated"
-
-
-    # def test_update_position(self):
-    #     employer = create_employer("john", "johnpass", "ACE Tech", "IT", "2223456", "john@acetech.com")
-    #     position = create_position("IT Assistant", "Assist wih service requests", "Level 2 IT degree or equivalent", "POS", employer.id)
-    #     updatedposition = update_position(position.id, "IT Assistant UPDATED", "Assist wih service requests", "Level 2 IT degree or equivalent", "POS", employer.id)
-    #     assert updatedposition.title == "IT Assistant UPDATED"
-    # '''
     
     # Ensures student is added to shortlist for a specified position by staff, with default status “Pending”
     def test_12_add_student_listing(self):
@@ -214,16 +182,6 @@ class UsersIntegrationTests(unittest.TestCase):
         listing = add_student(staff.id, student.id, position.id)
         assert listing.status == "Pending"
 
-    # '''
-    # def test_add_student_listing(self):
-    #     staff = create_staff("jill", "jillpass", "UWI", "DCIT", "3334456", "jill@uwistaff.edu")
-    #     student = create_student("rose", "rosepass", "UWI", "IT", 2, "1234567", "rose@uwi.edu")
-    #     employer = create_employer("john", "johnpass", "ACE Tech", "IT", "2223456", "john@acetech.com")
-    #     position = create_position("IT Assistant", "Assist wih service requests", "Level 2 IT degree or equivalent", "POS", employer.id)
-    #     listing = add_student(staff.id, student.id, position.id)
-    #     assert listing.status == "Pending"
-    # '''
-
     # Ensures employer’s response to specified listing is correctly updated
     def test_13_employer_response(self):
         employer = get_employer_by_username("john_updated")
@@ -231,36 +189,12 @@ class UsersIntegrationTests(unittest.TestCase):
         response = respond(employer.id, listing.id, "Accepted")
         assert response.status == "Accepted"
 
-
-    # '''
-    # def test_employer_response(self):
-    #     staff = create_staff("jill", "jillpass", "UWI", "DCIT", "3334456", "jill@uwistaff.edu")
-    #     student = create_student("rose", "rosepass", "UWI", "IT", 2, "1234567", "rose@uwi.edu")
-    #     employer = create_employer("john", "johnpass", "ACE Tech", "IT", "2223456", "john@acetech.com")
-    #     position = create_position("IT Assistant", "Assist wih service requests", "Level 2 IT degree or equivalent", "POS", employer.id)
-    #     listing = add_student(staff.id, student.id, position.id)
-    #     response = respond(employer.id, listing.id, "Accpeted")
-    #     assert response.status == "Accepted"
-    # '''
-
     # Ensures list of student shortlist is available
     def test_14_view_student_listing(self):
         student = get_student_by_username("rose_updated")
         result = view_student_listing(student.id)
         assert isinstance(result, list)
         assert len(result) > 0
-
-    # '''
-    # def test_view_student_listing(self):
-    #     staff = create_staff("jill", "jillpass", "UWI", "DCIT", "3334456", "jill@uwistaff.edu")
-    #     student = create_student("rose", "rosepass", "UWI", "IT", 2, "1234567", "rose@uwi.edu")
-    #     employer = create_employer("john", "johnpass", "ACE Tech", "IT", "2223456", "john@acetech.com")
-    #     position = create_position("IT Assistant", "Assist wih service requests", "Level 2 IT degree or equivalent", "POS", employer.id)
-    #     add_student(staff.id, student.id, position.id)
-    #     result = view_student_listing(student.id)
-    #     assert isinstance(result, list)
-    #     assert len(result) > 0
-    # '''
 
     # Ensures list of pending / accepted / rejected positions are available
     def test_15_view_response(self):
@@ -281,38 +215,3 @@ class UsersIntegrationTests(unittest.TestCase):
         rejected = view_response(student.id, "Rejected")
         assert isinstance(rejected, list)
         assert len(rejected) > 0
-
-# '''
-#     def test_view_accepted(self):
-#         staff = create_staff("jill", "jillpass", "UWI", "DCIT", "3334456", "jill@uwistaff.edu")
-#         student = create_student("rose", "rosepass", "UWI", "IT", 2, "1234567", "rose@uwi.edu")
-#         employer = create_employer("john", "johnpass", "ACE Tech", "IT", "2223456", "john@acetech.com")
-#         position = create_position("IT Assistant", "Assist wih service requests", "Level 2 IT degree or equivalent", "POS", employer.id)
-#         listing = create_listing(position.id, student.id, staff.id)
-#         respond(employer.id, listing.id, "Accepted")
-#         accepted = view_response(student.id, "Accepted")
-#         assert isinstance(accepted, list)
-#         assert len(accepted) > 0
-
-#     def test_view_rejected(self):
-#         staff = create_staff("jill", "jillpass", "UWI", "DCIT", "3334456", "jill@uwistaff.edu")
-#         student = create_student("rose", "rosepass", "UWI", "IT", 2, "1234567", "rose@uwi.edu")
-#         employer = create_employer("john", "johnpass", "ACE Tech", "IT", "2223456", "john@acetech.com")
-#         position = create_position("IT Assistant", "Assist wih service requests", "Level 2 IT degree or equivalent", "POS", employer.id)
-#         listing = create_listing(position.id, student.id, staff.id)
-#         respond(employer.id, listing.id, "Accepted")
-#         rejected = view_response(student.id, "Rejected")
-#         assert isinstance(rejected, list)
-#         assert len(rejected) > 0
-
-#     def test_view_pending(self):
-#         staff = create_staff("jill", "jillpass", "UWI", "DCIT", "3334456", "jill@uwistaff.edu")
-#         student = create_student("rose", "rosepass", "UWI", "IT", 2, "1234567", "rose@uwi.edu")
-#         employer = create_employer("john", "johnpass", "ACE Tech", "IT", "2223456", "john@acetech.com")
-#         position = create_position("IT Assistant", "Assist wih service requests", "Level 2 IT degree or equivalent", "POS", employer.id)
-#         listing = create_listing(position.id, student.id, staff.id)
-#         respond(employer.id, listing.id, "Pending")
-#         pending = view_response(student.id, "Pending")
-#         assert isinstance(pending, list)
-#         assert len(pending) > 0
-# '''
