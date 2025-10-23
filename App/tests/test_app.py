@@ -91,12 +91,9 @@ class PositionUnitTests(unittest.TestCase):
         assert position.title == "IT Assistant"
 
 
-
-
 '''
     Integration Tests
 '''
-
 
 # This fixture creates an empty database for the test and deletes it after the test
 # scope="class" would execute the fixture once and resued for all methods in the class
@@ -106,10 +103,6 @@ def empty_db():
     create_db()
     yield app.test_client()
     db.drop_all()
-
-   
-
-
 
 # def test_authenticate():
 #     user = create_user("bob", "bobpass")
@@ -139,43 +132,50 @@ class UsersIntegrationTests(unittest.TestCase):
     #     assert user.username == ron.username
     # '''
 
+    # Ensures employer record in the database has the correct values
     def test_04_create_employer(self):
         john = create_employer("john", "johnpass", "ACE Tech", "IT", "2223456", "john@acetech.com")
         user = get_employer_by_username("john")
         assert user.username == john.username
 
+    # Ensures employer record is correctly updated with new data using username
     def test_05_update_employer(self):
         employer = get_employer_by_username("john")
         updatedemployer = update_employer(employer.id, "john_updated", "ACE Tech", "IT", "2223456", "john@acetech.com")
         assert updatedemployer.username == "john_updated"
 
-
+    # Ensures staff record in the database has the correct values
     def test_06_create_staff(self):
         jill = create_staff("jill", "jillpass", "UWI", "DCIT", "3334456", "jill@uwistaff.edu")
         user = get_staff_by_username("jill")
         assert user.username == jill.username
 
+    # Ensures staff record is correctly updated with new data using username
     def test_07_update_staff(self):
         staff = get_staff_by_username("jill")
         updatedstaff = update_staff(staff.id, "jill_updated", "UWI", "DCIT", "3334456", "jill@uwistaff.edu")
         assert updatedstaff.username == "jill_updated"
 
+    # Ensures student record in the database has the correct values
     def test_08_create_student(self):
         rose = create_student("rose", "rosepass", "UWI", "IT", 2, "1234567", "rose@uwi.edu")
         user = get_student_by_username("rose")
         assert user.username == rose.username
 
+    # Ensures student record is correctly updated with new data using username
     def test_09_update_student(self):
         rose = get_student_by_username("rose")
         updatedstudent = update_student(rose.id, "rose_updated", "UWI", "IT", 2, "1234567", "rose@uwi.edu")
         assert updatedstudent.username == "rose_updated"
 
+    # Ensures position record in the database has the correct values
     def test_10_create_position(self):
         employer = get_employer_by_username("john_updated")
         internship = create_position("IT Assistant", "Assist wih service requests", "Level 2 IT degree or equivalent", "POS", employer.id)
         position = get_position(internship.id)
         assert position.title == "IT Assistant"
 
+    # Ensures position record is correctly updated with new data using position title
     def test_11_update_position(self):
         internship = get_position(1)
         updatedposition = update_position(internship.id, "IT Assistant UPDATED", "Assist wih service requests", "Level 2 IT degree or equivalent", "POS", internship.employer_id)
@@ -206,7 +206,7 @@ class UsersIntegrationTests(unittest.TestCase):
     #     assert updatedposition.title == "IT Assistant UPDATED"
     # '''
     
-
+    # Ensures student is added to shortlist for a specified position by staff, with default status “Pending”
     def test_12_add_student_listing(self):
         staff = get_staff_by_username("jill_updated")
         student = get_student_by_username("rose_updated")
@@ -224,6 +224,7 @@ class UsersIntegrationTests(unittest.TestCase):
     #     assert listing.status == "Pending"
     # '''
 
+    # Ensures employer’s response to specified listing is correctly updated
     def test_13_employer_response(self):
         employer = get_employer_by_username("john_updated")
         listing = get_listing(1)
@@ -242,6 +243,7 @@ class UsersIntegrationTests(unittest.TestCase):
     #     assert response.status == "Accepted"
     # '''
 
+    # Ensures list of student shortlist is available
     def test_14_view_student_listing(self):
         student = get_student_by_username("rose_updated")
         result = view_student_listing(student.id)
@@ -260,6 +262,7 @@ class UsersIntegrationTests(unittest.TestCase):
     #     assert len(result) > 0
     # '''
 
+    # Ensures list of pending / accepted / rejected positions are available
     def test_15_view_response(self):
         student = get_student_by_username("rose_updated")
         employer = get_employer_by_username("john_updated")
