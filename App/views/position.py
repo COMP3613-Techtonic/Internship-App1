@@ -17,8 +17,8 @@ from App.controllers import (
     get_position,
     update_position
 )
+position_views = Blueprint('position_views', __name__, template_folder='../templates', url_prefix='/api')
 
-position_views = Blueprint('position_views', __name__, template_folder='../templates')
 
 
 @position_views.route('/positions', methods=['POST'])

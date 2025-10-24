@@ -34,7 +34,7 @@ def login_action():
     else:
         flash('Login Successful')
         set_access_cookies(response, token) 
-    return response
+    return response, 200
 
 @auth_views.route('/logout', methods=['GET'])
 def logout_action():

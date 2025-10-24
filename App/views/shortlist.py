@@ -62,17 +62,44 @@ def list_all_shortlists_route():
     return jsonify(result), 200
 
 
+# @shortlist_views.route('/shortlists/position/<int:position_id>', methods=['GET'])
+# @jwt_required()
+# def get_position_shortlists_route(position_id):
+#     """
+#     Get shortlist entries for a specific position (employer view).
+#     """
+#     listings = get_employer_shortlist(position_id)
+#     if not listings:
+#         return jsonify({"message": "No shortlist entries found"}), 404
+#     result = []
+#     for l in listings:
+#         result.append({
+#             "id": l.id,
+#             "internship_id": l.internship_id,
+#             "student_id": l.student_id,
+#             "staff_id": l.staff_id,
+#             "status": l.status
+#         })
+#     return jsonify(result), 200
 @shortlist_views.route('/shortlists/position/<int:position_id>', methods=['GET'])
 @jwt_required()
 def get_position_shortlists_route(position_id):
     """
     Get shortlist entries for a specific position (employer view).
     """
-    listings = get_employer_shortlist(position_id)
-    if not listings:
+    employer_id = get_jwt_identity()
+    
+    # Get all shortlists for this employer
+    listings = get_employer_shortlist(employer_id)
+    
+    # Filter by the specific position_id
+    position_listings = [l for l in listings if l.internship_id == position_id]
+    
+    if not position_listings:
         return jsonify({"message": "No shortlist entries found"}), 404
+    
     result = []
-    for l in listings:
+    for l in position_listings:
         result.append({
             "id": l.id,
             "internship_id": l.internship_id,
@@ -80,6 +107,7 @@ def get_position_shortlists_route(position_id):
             "staff_id": l.staff_id,
             "status": l.status
         })
+    
     return jsonify(result), 200
 
 
